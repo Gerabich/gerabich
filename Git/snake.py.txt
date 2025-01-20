@@ -1,121 +1,29 @@
-import pygame
-import time
 import random
 
-# Inicializar pygame
-pygame.init()
+def adivina_el_numero():
+    print("¡Bienvenido al juego de Adivina el Número!")
+    print("Estoy pensando en un número entre 1 y 10.")
+    print("Trata de adivinarlo.")
+    
+    # Genera un número aleatorio entre 1 y 10
+    numero_secreto = random.randint(1, 10)
+    
+    while True:
+        try:
+            # Pide al usuario que adivine el número
+            adivinanza = int(input("Escribe tu número: "))
+            
+            if adivinanza < 1 or adivinanza > 10:
+                print("Por favor, elige un número entre 1 y 10.")
+            elif adivinanza < numero_secreto:
+                print("El número es más alto.")
+            elif adivinanza > numero_secreto:
+                print("El número es más bajo.")
+            else:
+                print(f"¡Felicidades! Adivinaste el número: {numero_secreto}")
+                break
+        except ValueError:
+            print("Por favor, escribe un número válido.")
 
-# Configuracion basica
-ANCHO = 600
-ALTO = 400
-TAMAÑO_CUADRO = 20
-VELOCIDAD = 15
-
-# Colores
-NEGRO = (0, 0, 0)
-BLANCO = (255, 255, 255)
-ROJO = (213, 50, 80)
-VERDE = (0, 255, 0)
-AZUL = (50, 153, 213)
-
-# Inicializar pantalla
-pantalla = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("Juego de Snake")
-
-# Reloj para controlar la velocidad
-reloj = pygame.time.Clock()
-
-# Fuente para texto
-fuente = pygame.font.SysFont("comicsans", 35)
-fuente_final = pygame.font.SysFont("comicsans", 50)
-
-def mensaje_final(mensaje, color):
-    mensaje_renderizado = fuente_final.render(mensaje, True, color)
-    pantalla.blit(mensaje_renderizado, [ANCHO / 6, ALTO / 3])
-
-def nuestro_snake(TAMAÑO_CUADRO, lista_snake):
-    for x in lista_snake:
-        pygame.draw.rect(pantalla, VERDE, [x[0], x[1], TAMAÑO_CUADRO, TAMAÑO_CUADRO])
-
-def juego():
-    game_over = False
-    game_cerrado = False
-
-    x1 = ANCHO / 2
-    y1 = ALTO / 2
-
-    x1_cambio = 0
-    y1_cambio = 0
-
-    lista_snake = []
-    largo_snake = 1
-
-    comida_x = round(random.randrange(0, ANCHO - TAMAÑO_CUADRO) / TAMAÑO_CUADRO) * TAMAÑO_CUADRO
-    comida_y = round(random.randrange(0, ALTO - TAMAÑO_CUADRO) / TAMAÑO_CUADRO) * TAMAÑO_CUADRO
-
-    while not game_over:
-
-        while game_cerrado:
-            pantalla.fill(NEGRO)
-            mensaje_final("Perdiste! Presiona C para continuar o Q para salir", ROJO)
-            pygame.display.update()
-
-            for evento in pygame.event.get():
-                if evento.type == pygame.KEYDOWN:
-                    if evento.key == pygame.K_q:
-                        game_over = True
-                        game_cerrado = False
-                    if evento.key == pygame.K_c:
-                        juego()
-
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                game_over = True
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_LEFT and x1_cambio == 0:
-                    x1_cambio = -TAMAÑO_CUADRO
-                    y1_cambio = 0
-                elif evento.key == pygame.K_RIGHT and x1_cambio == 0:
-                    x1_cambio = TAMAÑO_CUADRO
-                    y1_cambio = 0
-                elif evento.key == pygame.K_UP and y1_cambio == 0:
-                    y1_cambio = -TAMAÑO_CUADRO
-                    x1_cambio = 0
-                elif evento.key == pygame.K_DOWN and y1_cambio == 0:
-                    y1_cambio = TAMAÑO_CUADRO
-                    x1_cambio = 0
-
-        if x1 >= ANCHO or x1 < 0 or y1 >= ALTO or y1 < 0:
-            game_cerrado = True
-
-        x1 += x1_cambio
-        y1 += y1_cambio
-        pantalla.fill(AZUL)
-        pygame.draw.rect(pantalla, ROJO, [comida_x, comida_y, TAMAÑO_CUADRO, TAMAÑO_CUADRO])
-        cabeza_snake = []
-        cabeza_snake.append(x1)
-        cabeza_snake.append(y1)
-        lista_snake.append(cabeza_snake)
-        if len(lista_snake) > largo_snake:
-            del lista_snake[0]
-
-        for x in lista_snake[:-1]:
-            if x == cabeza_snake:
-                game_cerrado = True
-
-        nuestro_snake(TAMAÑO_CUADRO, lista_snake)
-
-        pygame.display.update()
-
-        if x1 == comida_x and y1 == comida_y:
-            comida_x = round(random.randrange(0, ANCHO - TAMAÑO_CUADRO) / TAMAÑO_CUADRO) * TAMAÑO_CUADRO
-            comida_y = round(random.randrange(0, ALTO - TAMAÑO_CUADRO) / TAMAÑO_CUADRO) * TAMAÑO_CUADRO
-            largo_snake += 1
-
-        reloj.tick(VELOCIDAD)
-
-    pygame.quit()
-    quit()
-
-# Ejecutar el juego
-juego()
+# Ejecuta el juego
+adivina_el_numero()
